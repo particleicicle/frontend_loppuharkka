@@ -4,14 +4,14 @@ function MainView() {
     const navigate = useNavigate();
     return (    
         <>
-        <button onClick={() => {navigate('/addnotes')}}>
-            Create notes for class
-        </button>
-        <button onClick={() => {navigate('/notelist')}}>
-            List notes
-        </button>    
-        <br/>
-        <button>Add courses</button>  
+            <button onClick={() => {navigate('/addnotes')}}>
+                Create notes for class
+            </button>
+            <button onClick={() => {navigate('/notelist')}}>
+                List notes
+            </button>    
+            <br/>
+            <button>Add courses</button>  
         </>   
     );
 }
