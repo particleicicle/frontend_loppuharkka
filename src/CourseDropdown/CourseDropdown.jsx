@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap'
 
 const allCoursesValue = "all"
 
-function CourseDropdown({includeAllCoursesOption = true, selectedCourse, handleSelectedCourse}) {
+function CourseDropdown({includeAllCoursesOption = true, value, onChange}) {
     const courses = useAppState((state) => state.courses)
     const dropdownItems = []
 
@@ -19,7 +19,7 @@ function CourseDropdown({includeAllCoursesOption = true, selectedCourse, handleS
     }
 
     return <>
-        <Form.Select id="course-select" value={selectedCourse} onChange={handleSelectedCourse}>
+        <Form.Select id="course-select" value={value} onChange={onChange}>
             {dropdownItems}
         </Form.Select>
     </>

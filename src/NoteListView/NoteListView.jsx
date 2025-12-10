@@ -7,7 +7,7 @@ const allCoursesValue = "all"
 function NoteListView() {
     const [selectedCourse, setSelectedCourse] = useState(allCoursesValue);
     return <>
-        <CourseDropdown selectedCourse={selectedCourse} handleSelectedCourse={(e) => setSelectedCourse(e.target.value)}/>
+        <CourseDropdown value={selectedCourse} onChange={(e) => setSelectedCourse(e.target.value)}/>
         <NoteList course={selectedCourse}/>
     </>
 }
@@ -29,13 +29,17 @@ function NoteList({course}) {
         )
     }
 
+    if (noteElements.length < 1) return <p>Ei muistiinpanoja!</p>
+
     return noteElements
 }
 
-function Note({note}) {
+export function Note({note}) {
+    const removeNote = useAppState((state) => state.removeNote)
     return <div className="note">
         <h5>{note.timestamp + ' ' + capitalizeString(note.course.name) + ' (id ' + note.id.toString() + ')'}</h5>
         <p>{note.text}</p>
+        <button onClick={() => removeNote(note)}>Delete</button>
     </div>
 }
 

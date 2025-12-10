@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './style.css'
 
 //Tilanhallinta
 
@@ -8,8 +9,46 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 export const useAppState = create(
   persist(
     (set, get) => ({
+
+      removeNote: (note) => {
+        const newNotes = get().notes.filter((value) => value != note)
+        set({notes: newNotes})
+      },
+
       courses: [],
       notes: [],
+
+      getCourseByName: (name) => {
+        const courses = get().courses;
+
+        for (let i = 0; i < courses.length; ++i) {
+          if (courses[i].name == name) return courses[i]
+        }
+
+        return undefined
+      },
+
+      getUnusedNoteID: () => {
+        let minValue = 0
+        const notes = get().notes
+
+        for (let i = 0; i < notes.length; ++i) {
+          if (notes[i].id > minValue) minValue = notes[i].id
+        }
+
+        return minValue + 1
+      },
+
+      getUnusedCourseID: () => {
+        let minValue = 0
+        const courses = get().courses
+
+        for (let i = 0; i < courses.length; ++i) {
+          if (courses[i].id > minValue) minValue = courses[i].id
+        }
+
+        return minValue + 1
+      },
 
       addCourse: (course) =>
         set({
@@ -43,6 +82,7 @@ export const useAppState = create(
 )
 
 export function capitalizeString(str) {
+  if (typeof(str) != 'string') return ""
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -54,10 +94,14 @@ import Header from './Header/Header.jsx'
 import MainView from './MainView/MainView.jsx'
 import AddNotesView from './AddNotesView/AddNotesView.jsx'
 import NoteListView from './NoteListView/NoteListView.jsx'
+import AddCoursesView from './AddCoursesView/AddCoursesView.jsx';
 
 function App() {
-    const fetchData = useAppState((state) => state.fetchData);
-    fetchData();
+    const courses = useAppState((state) => state.courses)
+    const fetchData = useAppState((state) => state.fetchData)
+    //hae kursseja ja muistiinpanoja jos kursseja ei ole
+    if (courses.length < 1) fetchData()
+  
     return <>
       <BrowserRouter>
           <Header/>
@@ -65,6 +109,7 @@ function App() {
             <Route path="/" element={<MainView/>}></Route>
             <Route path="/addnotes" element={<AddNotesView/>}></Route>
             <Route path="/notelist" element={<NoteListView/>}></Route>
+            <Route path="/addcourses" element={<AddCoursesView/>}></Route>
           </Routes>
       </BrowserRouter>
     </>
